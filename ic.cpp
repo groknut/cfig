@@ -55,68 +55,69 @@ void Ic::parse(const std::string& line)
 
 	std::string	key = trim(cline.substr(0, del_pos));
 	std::string val = trim(cline.substr(del_pos + 1));
+	val = val.find(' ') != std::string::npos ? val.substr(0, val.find(' ')) : val;
 
 	if (!key.empty())
 		data[section][key] = val;
 	
 }
 
-bool Ic::has(const std::string& target_section)
+bool Ic::has(const std::string& target_section) const
 {
 	return data.find(target_section) != data.end();
 }
 
-bool Ic::has(const std::string& target_section, const std::string& key)
+bool Ic::has(const std::string& target_section, const std::string& key) const
 {
 	auto it = data.find(target_section);
 	return it != data.end() && it->second.find(key) != it->second.end();
 }
 
-std::string Ic::getVal(const std::string& target, const std::string& key)
+std::string Ic::getVal(const std::string& target, const std::string& key) const
 {
 	auto it = data.find(target);
-	return it != data.end() ? ( it->second.find(key) != it->second.end() ? it->second[key] : "" ) : "";
+	return it != data.end() ? ( it->second.find(key) != it->second.end() ? it->second.at(key) : "" ) : "";
 }
 
-std::string Ic::getVal(const std::string& key)
+std::string Ic::getVal(const std::string& key) const
 {
 	return getVal(MAIN_SECTION_TITLE, key);
 }
 
 
-int Ic::as_int(const std::string& target, const std::string& key)
+int Ic::as_int(const std::string& target, const std::string& key) const
 {
 	return has(target, key) ? std::stoi(getVal(target, key)) : throw KeyError();
 }
 
-int Ic::as_int(const std::string& key)
+int Ic::as_int(const std::string& key) const
 {
 	return as_int(MAIN_SECTION_TITLE, key);
 }
 
 
-double Ic::as_double(const std::string& target, const std::string& key)
+double Ic::as_double(const std::string& target, const std::string& key) const
 {
 	return has(target, key) ? std::stod(getVal(target, key)) : throw KeyError();
 }
 
-double Ic::as_double(const std::string& key)
+double Ic::as_double(const std::string& key) const
 {
 	return as_double(MAIN_SECTION_TITLE, key);
 }
 
-bool Ic::as_bool(const std::string& target, const std::string& key)
+bool Ic::as_bool(const std::string& target, const std::string& key) const
 {
 	if (!has(target, key))
 		throw KeyError();
 		
-	std::string val = getVal(target, key);
+	const std::string val = getVal(target, key);
 
 	return val == "true" ? true : 
 		val == "false" ? false : throw BoolError();
 }
 
-bool Ic::as_bool(const std::string& key)
+bool Ic::as_bool(const std::string& key) const
 {
 	return as_bool(MAIN_SECTION_TITLE, key);
 }

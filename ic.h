@@ -38,25 +38,24 @@ public:
 	Ic(const std::string& filename) { load(filename); }
 	
 	// Get Value
-	std::string getVal(const std::string& target, const std::string& key);
-	std::string getVal(const std::string& key);
+	std::string getVal(const std::string& target, const std::string& key) const;
+	std::string getVal(const std::string& key) const;
 
 	// has methods
-	bool has(const std::string& target_section);
-	bool has(const std::string& target_section, const std::string& key);
+	bool has(const std::string& target_section) const;
+	bool has(const std::string& target_section, const std::string& key) const;
 
 	// int methods
-
-	int as_int(const std::string& target, const std::string& key);
-	int as_int(const std::string& key);
+	int as_int(const std::string& target, const std::string& key) const;
+	int as_int(const std::string& key) const;
 
 	// double methods
-	double as_double(const std::string& target, const std::string& key);
-	double as_double(const std::string& key);
+	double as_double(const std::string& target, const std::string& key) const;
+	double as_double(const std::string& key) const;
 
 	// bool methods
-	bool as_bool(const std::string& target, const std::string& key);
-	bool as_bool(const std::string& key);
+	bool as_bool(const std::string& target, const std::string& key) const;
+	bool as_bool(const std::string& key) const;
 };
 
 // ERRORS
