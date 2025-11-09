@@ -1,5 +1,5 @@
 
-#include "../head/ic.h"
+#include "ic.h"
 
 std::string trim(const std::string& str)
 {
@@ -57,7 +57,14 @@ void Ic::parse(const std::string& line)
 
 	std::string	key = trim(cline.substr(0, del_pos));
 	std::string val = trim(cline.substr(del_pos + 1));
-	val = val.find(' ') != std::string::npos ? val.substr(0, val.find(' ')) : val;
+
+	bool is_pair = val.find('(') != std::string::npos && val.find(')') != std::string::npos && 
+	val.find('(') < val.find(',') && val.find(',') < val.find(')');
+
+	if (is_pair)
+		val = val.substr(0, val.find(']'));
+	else
+		val = val.find(' ') != std::string::npos ? val.substr(0, val.find(' ')) : val;
 
 	if (!key.empty())
 		data[section][key] = val;
@@ -86,6 +93,34 @@ std::string Ic::getVal(const std::string& key) const
 	return getVal(MAIN_SECTION_TITLE, key);
 }
 
+std::pair<double, double> Ic::as_double_pair(const std::string& target, const std::string& key) const
+{
+	if (!has(target, key))
+		throw KeyError();
+	std::string str = getVal(target, key);
+
+	size_t open_bracket = str.find('(');
+	size_t close_bracket = str.find(')');
+
+	if (open_bracket == std::string::npos || close_bracket == std::string::npos)
+		throw ValueError();
+
+	size_t del = str.find(',');
+	return std::make_pair(std::stod(str.substr(1, del - 1)), std::stod(str.substr(del + 1, close_bracket - 1)));
+}
+
+std::pair<int, int> Ic::as_int_pair(const std::string& target, const std::string& key) const
+{
+	if (!has(target, key))
+		throw KeyError();
+	std::string str = getVal(target, key);
+
+	if (str.find('(') == std::string::npos || str.find(')') == std::string::npos)
+		throw ValueError();
+
+	size_t del = str.find(',');
+	return std::make_pair(std::stoi(str.substr(1, del - 1)), std::stoi(str.substr(del + 1, str.length() - 2)));
+}
 
 int Ic::as_int(const std::string& target, const std::string& key) const
 {
@@ -116,7 +151,7 @@ bool Ic::as_bool(const std::string& target, const std::string& key) const
 	const std::string val = getVal(target, key);
 
 	return val == "true" ? true : 
-		val == "false" ? false : throw BoolError();
+		val == "false" ? false : throw ValueError();
 }
 
 bool Ic::as_bool(const std::string& key) const

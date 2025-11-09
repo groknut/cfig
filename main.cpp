@@ -24,6 +24,7 @@ int main(int argc, char** argv)
 	std::cout << ic.as_int("graph", "b") << std::endl;
 	std::cout << ic.as_bool("c") << std::endl;
 	std::cout << ic.as_bool("d") << std::endl;
+	std::cout << ic.as_int_pair("main", "start").first << " " << ic.as_int_pair("main", "start").second << std::endl;
 	// std::cout << tol.as_bool("e") << std::endl;
 
 	std::cout << ic.as_double("graph", "k") << std::endl;
