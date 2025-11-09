@@ -1,5 +1,5 @@
 
-#include "ic.h"
+#include "../head/ic.h"
 
 std::string trim(const std::string& str)
 {
@@ -25,6 +25,8 @@ void Ic::load(const std::string& filename)
 
 	while (getline(in, line))
 		parse(line);
+
+	in.close();
 	
 }
 
