@@ -1,0 +1,16 @@
+; comment
+
+a: 10 ; main section (default)
+
+[graph]
+file: <path> ; "graph" section
+b: 20
+k: 20.25
+[] ; return to main section
+
+c: true true
+d: false
+e: ku
+
+[]
+start: (10.0, 20.26)

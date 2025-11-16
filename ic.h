@@ -53,6 +53,9 @@ public:
 	double as_double(const std::string& target, const std::string& key) const;
 	double as_double(const std::string& key) const;
 
+	std::pair<double, double> as_double_pair(const std::string& target, const std::string& key) const;
+	std::pair<int, int> as_int_pair(const std::string& target, const std::string& key) const;
+
 	// bool methods
 	bool as_bool(const std::string& target, const std::string& key) const;
 	bool as_bool(const std::string& key) const;
@@ -61,7 +64,7 @@ public:
 // ERRORS
 class FileNotExistence {};
 class KeyError {};
-class BoolError {};
+class ValueError {};
 
 // trim line
 std::string trim(const std::string& str);
