@@ -65,6 +65,7 @@ public:
 class FileNotExistence {};
 class KeyError {};
 class ValueError {};
+class FileFormatError {};
 
 // trim line
 std::string trim(const std::string& str);

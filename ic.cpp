@@ -14,7 +14,7 @@ void Ic::load(const std::string& filename)
 	std::string fname = filename;
 
 	if (fname.find(FORMAT) == std::string::npos)
-		fname += FORMAT;
+		throw FileFormatError();
 
 	std::ifstream in(fname);
 
