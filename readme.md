@@ -21,7 +21,7 @@ debug: true       ; булево значение
 project_name: example
 version: 0.1
 
-[database]
+[server]
 host: localhost
 port: 5432
 timeout: 30.5
@@ -104,3 +104,14 @@ if (config.has("project_name")) {
     // Ключ существует
 }
 ```
+
+### Поддерживаемые типы данных
+|Тип|Примеры|Метод преобразования|
+|---|-------|--------------------|
+|STRING|`hello`, `patho/to/file`|`.toString()` или неявное преоборазование|
+|INT|`10`, `0`|`.toInt()`|
+|FLOAT|`3.14`, `-2.5`|`.toFloat()`, `toDouble()`|
+|BOOL|`false`, `true`|`.toBool()`|
+
+### Лицензия
+**MIT License**. Подробности в файле `LICENSE`.
