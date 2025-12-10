@@ -142,6 +142,18 @@ void Cfig::load(const std::string& filename)
 		
 }
 
+void Cfig::setCommentPrefix(const CommentStyle& comment_style_)
+{
+	switch (comment_style_)
+	{
+		case HASH:
+			COMMENT_PREFIX = '#'; break;
+		case SEMICOLON:
+		default:
+			COMMENT_PREFIX = ';';
+	}
+}
+
 void Cfig::parse(const std::string& line)
 {
 

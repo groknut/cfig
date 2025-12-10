@@ -6,7 +6,11 @@
 int main()
 {
 
-	Cfig config("config.ini");
+	// Cfig config("config.ini");
+
+	Cfig config;
+	// config.setCommentPrefix();
+	config.load("config.ini");
 
 	int port = config.get("server", "port").toInt();
 	std::string host = config.get("server", "host");

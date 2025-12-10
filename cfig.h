@@ -44,7 +44,7 @@ class Cfig
 {
 private:
 	const char DELIMITER = ':';
-	const char COMMENT_PREFIX = ';';
+	char COMMENT_PREFIX = ';';
 	const char OPEN_SECTION = '[';
 	const char CLOSE_SECTION = ']';
 	const std::string MAIN_SECTION = "[]";
@@ -52,12 +52,16 @@ private:
 
 	std::unordered_map<std::string, std::unordered_map<std::string, CfigValue>> data;
 
-	void load(const std::string& filename);
 	std::string section = MAIN_SECTION_TITLE;
 	void parse(const std::string& line);
 
 public:
-	Cfig();
+	enum CommentStyle {
+		HASH, SEMICOLON, DOUBLE_SLASH
+	};
+	void setCommentPrefix(const CommentStyle& comment_style_);
+	Cfig() {};
+	Cfig(const CommentStyle& style) { setCommentPrefix(style); }
 	Cfig(const std::string& filename) { load(filename); }
 	bool has(const std::string& target_section) const;
 	bool has(const std::string& target_section, const std::string& key) const;
@@ -67,6 +71,8 @@ public:
 	const CfigValue& operator()(const std::string& section, const std::string& key) const {
 		return get(section, key);
 	}
+
+	void load(const std::string& filename);
 	
 };
 
