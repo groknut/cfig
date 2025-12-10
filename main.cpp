@@ -1,40 +1,24 @@
 
-
 #include <iostream>
-#include <fstream>
 #include <string>
+#include "cfig.h"
 
-#include "ic.h"
-
-
-void helper(const std::string& program);
-
-int main(int argc, char** argv)
+int main()
 {
 
-	if (argc != 2)
-	{
-		helper(argv[0]);
-		return 0;
-	}
-						
-	Ic ic(argv[1]);
+	Cfig config("config.ini");
 
-	std::cout << ic.as_int("a") << std::endl;
-	std::cout << ic.as_int("graph", "b") << std::endl;
-	std::cout << ic.as_bool("c") << std::endl;
-	std::cout << ic.as_bool("d") << std::endl;
-	std::cout << ic.as_int_pair("main", "start").first << " " << ic.as_int_pair("main", "start").second << std::endl;
-	// std::cout << tol.as_bool("e") << std::endl;
-
-	std::cout << ic.as_double("graph", "k") << std::endl;
-
+	int port = config.get("server", "port").toInt();
+	std::string host = config.get("server", "host");
+	bool debug = config.get("server", "debug").toBool();
+	float timeout = config.get("server", "timeout").toFloat();
+	
+	std::cout << "Server Configuration:" << std::endl;
+	std::cout << "Hostname: " << host << std::endl;
+	std::cout << "Port: " << port << std::endl;
+	std::cout << "Debug: " << debug << std::endl;
+	std::cout << "Timeout: " << timeout << std::endl;
+			
+	
 	return 0;
-
-}
-
-void helper(const std::string& program)
-{
-	std::cout << "Example:" << std::endl;
-	std::cout << program << "<file>: standard file reading (.ic format)" << std::endl;
 }

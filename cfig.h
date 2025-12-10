@@ -1,0 +1,79 @@
+
+
+#ifndef _CFIG_H_
+#define _CFIG_H_
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <unordered_map>
+
+// lang class
+std::string trim(const std::string& str);
+
+enum Type { STRING, INT, FLOAT, BOOL, PAIR };
+
+std::ostream& operator<<(std::ostream& out, const Type& type);
+
+class CfigValue
+{
+	std::string raw_;
+	Type type_;
+	Type detectType(const std::string& val);
+
+public:
+	CfigValue(const std::string& value) : raw_(trim(value)) {
+		type_ = detectType(raw_);
+	}
+	CfigValue() : type_(STRING), raw_("") {}
+
+	Type type() { return type_; }
+	std::string raw() { return raw_;  }
+
+	std::string toString() { return raw_; }
+
+	int toInt() const;
+	bool toBool() const;
+	float toFloat() const;
+	double toDouble() const;
+	operator std::string() const { return raw_; }
+	
+};
+
+class Cfig
+{
+private:
+	const char DELIMITER = ':';
+	const char COMMENT_PREFIX = ';';
+	const char OPEN_SECTION = '[';
+	const char CLOSE_SECTION = ']';
+	const std::string MAIN_SECTION = "[]";
+	const std::string MAIN_SECTION_TITLE = "main";
+
+	std::unordered_map<std::string, std::unordered_map<std::string, CfigValue>> data;
+
+	void load(const std::string& filename);
+	std::string section = MAIN_SECTION_TITLE;
+	void parse(const std::string& line);
+
+public:
+	Cfig();
+	Cfig(const std::string& filename) { load(filename); }
+	bool has(const std::string& target_section) const;
+	bool has(const std::string& target_section, const std::string& key) const;
+	const CfigValue& get(const std::string& section, const std::string& key) const;
+	const CfigValue& get(const std::string& key) const { return get(MAIN_SECTION_TITLE, key); }
+
+	const CfigValue& operator()(const std::string& section, const std::string& key) const {
+		return get(section, key);
+	}
+	
+};
+
+// // ERRORS
+class FileNotExistence {};
+class KeyError {};
+class SectionError {};
+class ValueError {};
+
+#endif
