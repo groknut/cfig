@@ -28,8 +28,6 @@ std::ostream& operator<<(std::ostream& out, const Type& type)
 			out << "float";break;
 		case BOOL:
 			out << "bool";break;
-		case PAIR:
-			out << "pair";break;
 		default:
 			out << "string";			
 	}
@@ -40,9 +38,6 @@ Type CfigValue::detectType(const std::string& val)
 {
 	if (val.empty())
 		return STRING;
-
-	if (val.front() == '(' && val.back() == ')' && val.find(',') != std::string::npos)
-			return PAIR;
 
 	if (val == "true" || val == "false")
 		return BOOL;
