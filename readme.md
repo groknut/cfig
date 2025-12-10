@@ -1,72 +1,92 @@
 
 
-## Ic - INI-like syntax
+## Cfig
+Простой язык конфигурации для C++ с автоматическим определением типов. 
 
-Был написан для решения задачи муравьиного алгоритма. Пары были добавлены в версии 0.0.2 для решения задачи алгоритма LIAN.
+> ⚠️ Версия v0.1 находится на отдельной ветке и имеет тяжелый синтаксис. 
+> Cfig — это полный редизайн, сохраняющий идеи, но с упрощенной архитектурой.
 
-**Текущая версия:** 0.0.2
-```ic
-; ================================
-; 			CONFIGURATION
-; ================================
-; Синтаксис:
-;   [секция]       - объявление секции параметров (по умолчанию `main`)
-;   ключ: значение - параметр и его значение
-;   ; комментарий  - строка комментария (игнорируется)
-;	; если требуется вернуться из секции [graph] в секцию `main` можно просто написать `[]` или `main`
-;	; в программу принимается `.ic` формат
+### Синтаксис
+По умолчанию все пары *ключ:значение* хранятся в секции `main`.
+```ini
+; это комментарий
+name: John        # строка
+port: 8080        # целое число
+ratio: 3.14       # число с плавающей точкой
+debug: true       # булево значение
 ```
+Для организации сложных конфигураций используйте секции
+```ini
+; Глобальные настройки (секция main)
+project_name: example
+version: 0.1
 
-**Значение может быть:**
-- `bool` типа: `true` или `false`
-- `int` типа: `1`
-- `double` типа: `1.25`
-- `pair` типа (только `int` и `double` значения!): `(10, 20)`
-- `string` типа: `file.txt`
+[database]
+host: localhost
+port: 5432
+timeout: 30.5
 
-### Методы:
+; Возвращаемся к main
+[]
+log_level: debug
+```
+### Основные возможности
+- **Автоматическое определение типов** — не нужно явно указывать `int`, `string`, `float` или `bool`
 
-**Получить значение:**
+- **INI-подобный синтаксис** — работает с привычными .cfg, .ini и .cfig файлами
+
+### Работа с библиотекой `cfig.h`
+`cfig.h` — это легковесная C++ библиотека для работы с конфигурационными файлами с автоопределением типов.
+
+#### Быстрый старт
 ```cpp
-std::string val = getVal("key");
-std::string val = getVal("ant", "rho");
+#include <iostream>
+#include <string>
+#include "cfig.h"
+
+int main()
+{
+
+	Cfig config("config.ini");
+
+	int port = config.get("server", "port").toInt();
+	std::string host = config.get("server", "host");
+	bool debug = config.get("server", "debug").toBool();
+	float timeout = config.get("server", "timeout").toFloat();
+	
+	std::cout << "Server Configuration:" << std::endl;
+	std::cout << "Hostname: " << host << std::endl;
+	std::cout << "Port: " << port << std::endl;
+	std::cout << "Debug: " << debug << std::endl;
+	std::cout << "Timeout: " << timeout << std::endl;
+	
+	return 0;
+}
 ```
 
-**Существование секции, либо ключа:**
-```cpp
-if (has("ant", "key"))
-	std::cout << ic.getVal("ant", "rho");
-// или если мы знаем, что у ant точно есть ключ rho
-if (has("ant"))
-	std::cout << ic.getVal("ant", "rho");
+#### Файл `config.ini`:
+```ini
+[server]
+port: 8080
+host: localhost
+debug: true
+timeout: 3.5
 ```
 
-**Получаем int значение:**
+#### Методы API
+`get()` **- получение значений**
+
+возвращает значение по секции и ключу. Бросает исключение, если ключ не найден. 
 ```cpp
-int iter = ic.as_int("iters");
-int iter = ic.as_int("colony", "iters");
+// Из указанной секции
+std::string host = config.get("server", "host");
+
+// Из секции main (по умолчанию)
+std::string name = config.get("name");
+
+// Явное преобразование
+int port = config.get("server", "port").toInt();
+bool debug = config.get("server", "debug").toBool();
+float timeout = config.get("server", "timeout").toFloat();
 ```
 
-**Получаем double значение:**
-```cpp
-double iter = ic.as_double("iters");
-double iter = ic.as_double("colony", "iters");
-```
-
-**Получаем bool значение:**
-```cpp
-bool b = ic.as_bool("bool");
-bool b = ic.as_bool("test", "bool");
-```
-
-**Получаем pair<int ,int> значение:**
-```cpp
-std::pair<int ,int> p = ic.as_int_pair("pair");
-std::pair<int ,int> p = ic.as_int_pair("test", "pair");
-```
-
-**Получаем pair<double, double> значение:**
-```cpp
-std::pair<double, double> p = ic.as_double_pair("pair");
-std::pair<double, double> p = ic.as_double_pair("test", "pair");
-```
