@@ -30,13 +30,19 @@ public:
 	Type type() { return type_; }
 	std::string raw() { return raw_;  }
 
-	std::string toString() { return raw_; }
+	std::string toString() const { return raw_; }
 
 	int toInt() const;
 	bool toBool() const;
 	float toFloat() const;
 	double toDouble() const;
 	operator std::string() const { return raw_; }
+
+	int toInt(int defaultValue) const;
+	bool toBool(bool defaultValue) const; 
+	float toFloat(float defaultValue) const; 
+	double toDouble(double defaultValue) const; 
+ 
 	
 };
 

@@ -1,6 +1,8 @@
 
 #include "cfig.h"
 
+
+
 const CfigValue& Cfig::get(const std::string& section, const std::string& key) const
 {
 	auto sec_it = data.find(section);
@@ -195,4 +197,42 @@ bool Cfig::has(const std::string& target_section, const std::string& key) const
 {
 	auto it = data.find(target_section);
 	return it != data.end() && it->second.find(key) != it->second.end();
+}
+
+
+int CfigValue::toInt(int defaultValue) const
+{
+	try {
+		return toInt();
+	} catch (const std::exception&) {
+		return defaultValue;
+	}
+}
+
+bool CfigValue::toBool(bool defaultValue) const
+{
+	try {
+		return toBool();
+	} catch (const std::exception&) {
+		return defaultValue;
+	}
+}
+
+float CfigValue::toFloat(float defaultValue) const
+{
+	try {
+		return toFloat();
+	} catch (const std::exception&) {
+		return defaultValue;
+	}
+}
+
+
+double CfigValue::toDouble(double defaultValue) const
+{
+	try {
+		return toDouble();
+	} catch (const std::exception&) {
+		return defaultValue;
+	}
 }

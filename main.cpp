@@ -15,7 +15,7 @@ int main()
 	int port = config.get("server", "port").toInt();
 	std::string host = config.get("server", "host");
 	bool debug = config.get("server", "debug").toBool();
-	float timeout = config.get("server", "timeout").toFloat();
+	float timeout = config.get("server", "timeout").toFloat(10.25f);
 	
 	std::cout << "Server Configuration:" << std::endl;
 	std::cout << "Hostname: " << host << std::endl;
