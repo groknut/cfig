@@ -42,8 +42,6 @@ public:
 	bool toBool(bool defaultValue) const; 
 	float toFloat(float defaultValue) const; 
 	double toDouble(double defaultValue) const; 
- 
-	
 };
 
 class Cfig

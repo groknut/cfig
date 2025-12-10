@@ -1,8 +1,6 @@
 
 #include "cfig.h"
 
-
-
 const CfigValue& Cfig::get(const std::string& section, const std::string& key) const
 {
 	auto sec_it = data.find(section);

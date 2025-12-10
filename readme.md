@@ -108,7 +108,7 @@ if (config.has("project_name")) {
 ### Поддерживаемые типы данных
 |Тип|Примеры|Метод преобразования|
 |---|-------|--------------------|
-|STRING|`hello`, `patho/to/file`|`.toString()` или неявное преоборазование|
+|STRING|`hello`, `patho/to/file`|`.toString()` или неявное преобразование|
 |INT|`10`, `0`|`.toInt()`|
 |FLOAT|`3.14`, `-2.5`|`.toFloat()`, `toDouble()`|
 |BOOL|`false`, `true`|`.toBool()`|
