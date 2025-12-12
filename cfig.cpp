@@ -1,6 +1,16 @@
 
 #include "cfig.h"
 
+std::string strip(const std::string& str)
+{
+	if (str.empty())
+		return str;
+		
+	if (str.at(0) == '"' && str.at(str.size() - 1) == '"')
+		return str.substr(1, str.length() - 2);
+	return str;
+}
+
 const CfigValue& Cfig::get(const std::string& section, const std::string& key) const
 {
 	auto sec_it = data.find(section);
@@ -180,7 +190,7 @@ void Cfig::parse(const std::string& line)
 		return;
 
 	std::string	key = trim(cline.substr(0, del_pos));
-	CfigValue val = CfigValue(trim(cline.substr(del_pos + 1)));
+	CfigValue val = CfigValue(strip(trim(cline.substr(del_pos + 1))));
 	
 	if (!key.empty())
 		data[section][key] = val;

@@ -11,7 +11,9 @@
 // lang class
 std::string trim(const std::string& str);
 
-enum Type { STRING, INT, FLOAT, BOOL };
+std::string strip(const std::string& str);
+
+enum Type { STRING, INT, FLOAT, BOOL, CHAR };
 
 std::ostream& operator<<(std::ostream& out, const Type& type);
 
