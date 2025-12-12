@@ -8,6 +8,12 @@
 #include <string>
 #include <unordered_map>
 
+// // ERRORS
+class FileNotExistence {};
+class KeyError {};
+class SectionError {};
+class ValueError {};
+
 // lang class
 std::string trim(const std::string& str);
 
@@ -30,7 +36,7 @@ public:
 	CfigValue() : type_(STRING), raw_("") {}
 
 	Type type() { return type_; }
-	std::string raw() { return raw_;  }
+	std::string raw() const { return raw_;  }
 
 	std::string toString() const { return raw_; }
 
@@ -40,12 +46,6 @@ public:
 	double toDouble() const;
 	char toChar() const;
 	operator std::string() const { return raw_; }
-
-	int toInt(int defaultValue) const;
-	char toChar(char defaultValue) const;
-	bool toBool(bool defaultValue) const; 
-	float toFloat(float defaultValue) const; 
-	double toDouble(double defaultValue) const; 
 };
 
 class Cfig
@@ -85,14 +85,10 @@ public:
 		return get(section, key);
 	}
 
-	void load(const std::string& filename);
-	
+	template<typename T>
+	T get(const std::string& section, const std::string& key, const T& defaultValue) const;
+	void load(const std::string& filename);	
 };
 
-// // ERRORS
-class FileNotExistence {};
-class KeyError {};
-class SectionError {};
-class ValueError {};
 
 #endif

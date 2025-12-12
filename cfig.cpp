@@ -86,15 +86,30 @@ char CfigValue::toChar() const
 	switch (type_)
 	{
 		case INT:
+			try {
+				int value = std::stoi(raw_);
+				return static_cast<char>(value);
+			} catch (const std::exception& e) {
+				throw std::runtime_error("Cannot convert to char: " + raw_);
+			}
+		case FLOAT:
+			try {
+				double value = std::stod(raw_);
+				return static_cast<char>(value);
+			} catch (const std::exception& e) {
+				throw std::runtime_error("Cannot convert to char: " + raw_);
+			}
 		case BOOL:
+			return toBool() ? '1' : '0';
+		case STRING:
 		case CHAR:
 			try {
-				return raw_.front();
+				return raw_[0];
 			} catch (const std::exception& e) {
 				throw std::runtime_error("Cannot convert to char: " + raw_);
 			}
 		default:
-			throw std::runtime_error("Cannot convert to int: " + raw_);			
+			throw std::runtime_error("Cannot convert to char: " + raw_);			
 	}
 }
 
@@ -250,48 +265,65 @@ bool Cfig::has(const std::string& target_section, const std::string& key) const
 }
 
 
-int CfigValue::toInt(int defaultValue) const
+template<typename T>
+T Cfig::get(const std::string& section, const std::string& key, const T& defaultValue) const
+{
+    throw std::runtime_error("Unsupported type");
+}
+
+template<>
+int Cfig::get<int>(const std::string& section, const std::string& key, const int& defaultValue) const
 {
 	try {
-		return toInt();
-	} catch (const std::exception&) {
+		const CfigValue& value = get(section, key);
+		return value.toInt();
+	} catch (...) {
 		return defaultValue;
 	}
 }
 
-char CfigValue::toChar(char defaultValue) const
+template<> double Cfig::get<double>(const std::string& section, const std::string& key, const double& defaultValue) const
 {
 	try {
-		return toChar();
-	} catch (const std::exception&) {
+		const CfigValue& value = get(section, key);
+		return value.toDouble();
+	} catch (...) {
 		return defaultValue;
 	}
 }
-
-bool CfigValue::toBool(bool defaultValue) const
+template<> bool Cfig::get<bool>(const std::string& section, const std::string& key, const bool& defaultValue) const
 {
 	try {
-		return toBool();
-	} catch (const std::exception&) {
+		const CfigValue& value = get(section, key);
+		return value.toBool();
+	} catch (...) {
 		return defaultValue;
 	}
 }
-
-float CfigValue::toFloat(float defaultValue) const
+template<> float Cfig::get<float>(const std::string& section, const std::string& key, const float& defaultValue) const
 {
 	try {
-		return toFloat();
-	} catch (const std::exception&) {
+		const CfigValue& value = get(section, key);
+		return value.toFloat();
+	} catch (...) {
 		return defaultValue;
 	}
 }
-
-
-double CfigValue::toDouble(double defaultValue) const
+template<> char Cfig::get<char>(const std::string& section, const std::string& key, const char& defaultValue) const
 {
 	try {
-		return toDouble();
-	} catch (const std::exception&) {
+		const CfigValue& value = get(section, key);
+		return value.toChar();
+	} catch (...) {
+		return defaultValue;
+	}
+}
+template<> std::string Cfig::get<std::string>(const std::string& section, const std::string& key, const std::string& defaultValue) const
+{
+	try {
+		const CfigValue& value = get(section, key);
+		return value.raw();
+	} catch (...) {
 		return defaultValue;
 	}
 }
