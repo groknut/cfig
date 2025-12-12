@@ -8,7 +8,7 @@ int main()
 
 	// Cfig config("config.ini");
 
-	Cfig config;
+	Cfig config(Cfig::EQUAL);
 	config.setCommentPrefix(Cfig::HASH);
 	config.load("config.ini");
 
@@ -16,13 +16,14 @@ int main()
 	std::string host = config.get("server", "host");
 	bool debug = config.get("server", "debug").toBool();
 	float timeout = config.get("server", "timeout").toFloat(10.25f);
+	char mark = config.get("server", "char").toChar();
 	
 	std::cout << "Server Configuration:" << std::endl;
 	std::cout << "Hostname: " << host << std::endl;
 	std::cout << "Port: " << port << std::endl;
 	std::cout << "Debug: " << debug << std::endl;
 	std::cout << "Timeout: " << timeout << std::endl;
-			
+	std::cout << "Mark: " << mark << std::endl;
 	
 	return 0;
 }
