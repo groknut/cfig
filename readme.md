@@ -68,9 +68,10 @@ int main()
 ```ini
 [server]
 port: 8080
-host: localhost
+host: localhost # или "localhost"
 debug: true
 timeout: 3.5
+char: 'X'
 ```
 
 #### Методы API
@@ -108,10 +109,11 @@ if (config.has("server")) {
 ### Поддерживаемые типы данных
 |Тип|Примеры|Метод преобразования|
 |---|-------|--------------------|
-|STRING|`hello`, `patho/to/file`|`.toString()` или неявное преобразование|
+|STRING|`"hello"`, `patho/to/file`|`.toString()` или неявное преобразование|
 |INT|`10`, `0`|`.toInt()`|
 |FLOAT|`3.14`, `-2.5`|`.toFloat()`, `toDouble()`|
 |BOOL|`false`, `true`|`.toBool()`|
+|CHAR|`X`, `'X'`|`.toChar()`|
 
 ### Лицензия
 **MIT License**. Подробности в файле `LICENSE`.
