@@ -38,9 +38,11 @@ public:
 	bool toBool() const;
 	float toFloat() const;
 	double toDouble() const;
+	char toChar() const;
 	operator std::string() const { return raw_; }
 
 	int toInt(int defaultValue) const;
+	char toChar(char defaultValue) const;
 	bool toBool(bool defaultValue) const; 
 	float toFloat(float defaultValue) const; 
 	double toDouble(double defaultValue) const; 
@@ -49,7 +51,7 @@ public:
 class Cfig
 {
 private:
-	const char DELIMITER = ':';
+	char DELIMITER = ':';
 	char COMMENT_PREFIX = ';';
 	const char OPEN_SECTION = '[';
 	const char CLOSE_SECTION = ']';
@@ -65,6 +67,10 @@ public:
 	enum CommentStyle {
 		HASH, SEMICOLON, DOUBLE_SLASH
 	};
+	enum DelimiterStyle {
+		EQUAL, COLON
+	};
+	void setDelimiterPrefix(const DelimiterStyle& delimiter_style_);	
 	void setCommentPrefix(const CommentStyle& comment_style_);
 	Cfig() {};
 	Cfig(const CommentStyle& style) { setCommentPrefix(style); }

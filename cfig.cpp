@@ -5,9 +5,13 @@ std::string strip(const std::string& str)
 {
 	if (str.empty())
 		return str;
-		
+				
 	if (str.at(0) == '"' && str.at(str.size() - 1) == '"')
 		return str.substr(1, str.length() - 2);
+
+	if (str.at(0) == '\'' && str.at(str.size() - 1) == '\'')
+		return str.substr(1, str.length() - 2);
+		
 	return str;
 }
 
@@ -38,6 +42,8 @@ std::ostream& operator<<(std::ostream& out, const Type& type)
 			out << "float";break;
 		case BOOL:
 			out << "bool";break;
+		case CHAR:
+			out << "char"; break;
 		default:
 			out << "string";			
 	}
@@ -48,6 +54,11 @@ Type CfigValue::detectType(const std::string& val)
 {
 	if (val.empty())
 		return STRING;
+
+	if (strip(val).size() == 1)
+	{
+		return CHAR;
+	}
 
 	if (val == "true" || val == "false")
 		return BOOL;
@@ -66,8 +77,25 @@ Type CfigValue::detectType(const std::string& val)
 			p++;
 		}
 		return INT;
-	}
+	}	
 	return STRING;		
+}
+
+char CfigValue::toChar() const
+{
+	switch (type_)
+	{
+		case INT:
+		case BOOL:
+		case CHAR:
+			try {
+				return raw_.front();
+			} catch (const std::exception& e) {
+				throw std::runtime_error("Cannot convert to char: " + raw_);
+			}
+		default:
+			throw std::runtime_error("Cannot convert to int: " + raw_);			
+	}
 }
 
 int CfigValue::toInt() const
@@ -190,7 +218,9 @@ void Cfig::parse(const std::string& line)
 		return;
 
 	std::string	key = trim(cline.substr(0, del_pos));
-	CfigValue val = CfigValue(strip(trim(cline.substr(del_pos + 1))));
+	CfigValue val = CfigValue(
+		strip(trim(cline.substr(del_pos + 1)))
+	);
 	
 	if (!key.empty())
 		data[section][key] = val;
@@ -212,6 +242,15 @@ int CfigValue::toInt(int defaultValue) const
 {
 	try {
 		return toInt();
+	} catch (const std::exception&) {
+		return defaultValue;
+	}
+}
+
+char CfigValue::toChar(char defaultValue) const
+{
+	try {
+		return toChar();
 	} catch (const std::exception&) {
 		return defaultValue;
 	}
