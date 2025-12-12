@@ -180,6 +180,18 @@ void Cfig::load(const std::string& filename)
 		
 }
 
+void Cfig::setDelimiter(const Delimiter& del_)
+{
+	switch (del_)
+	{
+		case EQUAL:
+			DELIMITER = '='; break;
+		case COLON:
+		default:
+			DELIMITER = ':';
+	}
+}
+
 void Cfig::setCommentPrefix(const CommentStyle& comment_style_)
 {
 	switch (comment_style_)

@@ -67,13 +67,14 @@ public:
 	enum CommentStyle {
 		HASH, SEMICOLON, DOUBLE_SLASH
 	};
-	enum DelimiterStyle {
+	enum Delimiter {
 		EQUAL, COLON
 	};
-	void setDelimiterPrefix(const DelimiterStyle& delimiter_style_);	
+	void setDelimiter(const Delimiter& del_);	
 	void setCommentPrefix(const CommentStyle& comment_style_);
 	Cfig() {};
 	Cfig(const CommentStyle& style) { setCommentPrefix(style); }
+	Cfig(const Delimiter& del) { setDelimiter(del); }
 	Cfig(const std::string& filename) { load(filename); }
 	bool has(const std::string& target_section) const;
 	bool has(const std::string& target_section, const std::string& key) const;
