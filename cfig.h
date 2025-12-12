@@ -87,6 +87,9 @@ public:
 
 	template<typename T>
 	T get(const std::string& section, const std::string& key, const T& defaultValue) const;
+	template<typename T>
+	T get(const std::string& key, const T& defaultValue) const;
+		
 	void load(const std::string& filename);	
 };
 

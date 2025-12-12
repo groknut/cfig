@@ -55,11 +55,6 @@ Type CfigValue::detectType(const std::string& val)
 	if (val.empty())
 		return STRING;
 
-	if (strip(val).size() == 1)
-	{
-		return CHAR;
-	}
-
 	if (val == "true" || val == "false")
 		return BOOL;
 
@@ -78,6 +73,10 @@ Type CfigValue::detectType(const std::string& val)
 		}
 		return INT;
 	}	
+
+	if (strip(val).size() == 1)
+		return CHAR;
+	
 	return STRING;		
 }
 
@@ -271,6 +270,12 @@ T Cfig::get(const std::string& section, const std::string& key, const T& default
     throw std::runtime_error("Unsupported type");
 }
 
+// template<typename T>
+// T Cfig::get(const std::string& key, const T& defaultValue) const
+// {
+// 	throw std::runtime_error("Unsupported type");
+// }
+
 template<>
 int Cfig::get<int>(const std::string& section, const std::string& key, const int& defaultValue) const
 {
@@ -326,4 +331,41 @@ template<> std::string Cfig::get<std::string>(const std::string& section, const 
 	} catch (...) {
 		return defaultValue;
 	}
+}
+
+template<>
+int Cfig::get<int>(const std::string& key, const int& defaultValue) const
+{
+	return get<int>(MAIN_SECTION_TITLE, key, defaultValue);
+}
+
+
+template<>
+bool Cfig::get<bool>(const std::string& key, const bool& defaultValue) const
+{
+	return get<bool>(MAIN_SECTION_TITLE, key, defaultValue);
+}
+
+template<>
+double Cfig::get<double>(const std::string& key, const double& defaultValue) const
+{
+	return get<double>(MAIN_SECTION_TITLE, key, defaultValue);
+}
+
+template<>
+float Cfig::get<float>(const std::string& key, const float& defaultValue) const
+{
+	return get<float>(MAIN_SECTION_TITLE, key, defaultValue);
+}
+
+template<>
+char Cfig::get<char>(const std::string& key, const char& defaultValue) const
+{
+	return get<char>(MAIN_SECTION_TITLE, key, defaultValue);
+}
+
+template<>
+std::string Cfig::get<std::string>(const std::string& key, const std::string& defaultValue) const
+{
+	return get<std::string>(MAIN_SECTION_TITLE, key, defaultValue);
 }
