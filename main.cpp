@@ -12,6 +12,7 @@ int main()
 	std::string host = config.get<std::string>("server", "hosta", std::string("127.0.0.1"));
 	bool debug = config.get("server", "debug").toBool();
 	float timeout = config.get<float>("", "", 10.25f);
+	std::pair<int, int> mypair = config.get("pair").toPair<int>();
 
 	CfigValue test = config.get("server", "char");
 	
@@ -24,6 +25,10 @@ int main()
 	std::cout << "test:" << config.has("main", "test") << std::endl;
 	std::cout << "test:" << config.get<int>("test", 20) << std::endl;
 	std::cout << "test:" << config.get<int>("main", "test", 20) << std::endl;
+
+	std::cout << "MyPair: " << mypair.first << std::endl;
+	std::cout << "MyPair: " << mypair.second << std::endl;
+	
 	
 	
 	return 0;
