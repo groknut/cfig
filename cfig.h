@@ -23,6 +23,8 @@ enum Type { STRING, INT, FLOAT, BOOL, CHAR };
 
 std::ostream& operator<<(std::ostream& out, const Type& type);
 
+
+
 class CfigValue
 {
 	std::string raw_;
@@ -50,6 +52,14 @@ public:
 
 class Cfig
 {
+
+public:
+	enum CommentStyle {
+		HASH, SEMICOLON, DOUBLE_SLASH
+	};
+	enum Delimiter {
+		EQUAL, COLON
+	};
 private:
 	char DELIMITER = ':';
 	char COMMENT_PREFIX = ';';
@@ -63,19 +73,18 @@ private:
 	std::string section = MAIN_SECTION_TITLE;
 	void parse(const std::string& line);
 
-public:
-	enum CommentStyle {
-		HASH, SEMICOLON, DOUBLE_SLASH
-	};
-	enum Delimiter {
-		EQUAL, COLON
-	};
 	void setDelimiter(const Delimiter& del_);	
 	void setCommentPrefix(const CommentStyle& comment_style_);
+
+public:
+
 	Cfig() {};
 	Cfig(const CommentStyle& style) { setCommentPrefix(style); }
 	Cfig(const Delimiter& del) { setDelimiter(del); }
 	Cfig(const std::string& filename) { load(filename); }
+	Cfig(const CommentStyle& style, const Delimiter& del);
+	Cfig(const Delimiter& del, const CommentStyle& style);
+	Cfig(const std::string& filename, const Delimiter& del, const CommentStyle& style);
 	bool has(const std::string& target_section) const;
 	bool has(const std::string& target_section, const std::string& key) const;
 	const CfigValue& get(const std::string& section, const std::string& key) const;

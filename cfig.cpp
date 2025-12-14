@@ -1,6 +1,26 @@
 
 #include "cfig.h"
 
+
+Cfig::Cfig(const CommentStyle& style, const Delimiter& del)
+{
+	setDelimiter(del);
+	setCommentPrefix(style);
+}
+
+Cfig::Cfig(const Delimiter& del, const CommentStyle& style)
+{
+	setDelimiter(del);
+	setCommentPrefix(style);
+}
+
+Cfig::Cfig(const std::string& filename, const Delimiter& del, const CommentStyle& style)
+{
+	setDelimiter(del);
+	setCommentPrefix(style);
+	load(filename);
+}
+
 std::string strip(const std::string& str)
 {
 	if (str.empty())
