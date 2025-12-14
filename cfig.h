@@ -19,7 +19,7 @@ std::string trim(const std::string& str);
 
 std::string strip(const std::string& str);
 
-enum Type { STRING, INT, FLOAT, BOOL, CHAR };
+enum Type { STRING, INT, FLOAT, BOOL, CHAR, PAIR };
 
 std::ostream& operator<<(std::ostream& out, const Type& type);
 
@@ -30,6 +30,29 @@ class CfigValue
 	std::string raw_;
 	Type type_;
 	Type detectType(const std::string& val);
+
+	std::pair<std::string, std::string> toStringPair() const 
+	{
+		if (type_ != PAIR)
+			throw std::runtime_error("Not a pair");
+		return parsePair();
+	}
+
+	std::pair<std::string, std::string> parsePair() const
+	{
+		if (raw_.size() < 3 || raw_[0] != '(' || raw_.back() != ')')
+			throw std::runtime_error("Invalid pair format");
+
+		std::string inner = raw_.substr(1, raw_.size() - 2);
+		size_t comma = inner.find(',');
+		if (comma == std::string::npos)
+			throw std::runtime_error("No comma in pair");
+
+		return {
+			strip(inner.substr(0, comma)),
+			strip(inner.substr(comma+1))
+		};
+	}
 
 public:
 	CfigValue(const std::string& value) : raw_(trim(value)) {
@@ -42,6 +65,37 @@ public:
 
 	std::string toString() const { return raw_; }
 
+	template<typename T>
+	std::pair<T, T> toPair() const
+	{
+	    auto str_pair = toStringPair();
+	    
+	    if constexpr (std::is_same_v<T, std::string>) {
+	        return str_pair;
+	    }
+	    else if constexpr (std::is_same_v<T, int>) {
+	        return { std::stoi(str_pair.first), std::stoi(str_pair.second) };
+	    }
+	    else if constexpr (std::is_same_v<T, float>) {
+	        return { std::stof(str_pair.first), std::stof(str_pair.second) };
+	    }
+	    else if constexpr (std::is_same_v<T, double>) {
+	        return { std::stod(str_pair.first), std::stod(str_pair.second) };
+	    }
+	    else if constexpr (std::is_same_v<T, bool>) {
+	        auto to_bool = [](const std::string& s) { return s == "true" || s == "1"; };
+	        return { to_bool(str_pair.first), to_bool(str_pair.second) };
+	    }
+	    else if constexpr (std::is_same_v<T, char>) {
+	        if (str_pair.first.size() != 1 || str_pair.second.size() != 1)
+	            throw std::runtime_error("Invalid char pair");
+	        return { str_pair.first[0], str_pair.second[0] };
+	    }
+	    else {
+	        throw std::runtime_error("Unsupported pair type");
+	    }
+	}
+
 	int toInt() const;
 	bool toBool() const;
 	float toFloat() const;
@@ -49,6 +103,8 @@ public:
 	char toChar() const;
 	operator std::string() const { return raw_; }
 };
+
+
 
 class Cfig
 {

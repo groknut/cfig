@@ -78,6 +78,14 @@ Type CfigValue::detectType(const std::string& val)
 	if (val == "true" || val == "false")
 		return BOOL;
 
+	if (val.size() > 3 || val[0] == '(' || val.back() == ')')
+	{
+		std::string inner = val.substr(1, val.size() - 2);
+		size_t comma = inner.find(',');
+		if (comma != std::string::npos)
+			return PAIR;
+	}
+
 	const char* start = val.c_str();
 	char* endptr;
 
@@ -96,7 +104,7 @@ Type CfigValue::detectType(const std::string& val)
 
 	if (strip(val).size() == 1)
 		return CHAR;
-	
+		
 	return STRING;		
 }
 
@@ -284,17 +292,7 @@ bool Cfig::has(const std::string& target_section, const std::string& key) const
 }
 
 
-template<typename T>
-T Cfig::get(const std::string& section, const std::string& key, const T& defaultValue) const
-{
-    throw std::runtime_error("Unsupported type");
-}
 
-// template<typename T>
-// T Cfig::get(const std::string& key, const T& defaultValue) const
-// {
-// 	throw std::runtime_error("Unsupported type");
-// }
 
 template<>
 int Cfig::get<int>(const std::string& section, const std::string& key, const int& defaultValue) const
