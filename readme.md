@@ -39,6 +39,15 @@ log_level: debug
 ### Работа с библиотекой `cfig.h`
 `cfig.h` — это легковесная C++ библиотека для работы с конфигурационными файлами с автоопределением типов.
 
+#### Как подключить библиотеку
+В директории проекта выполните
+```bash
+mkdir -p libs
+git submodule add https://github.com/groknut/cfig libs/cfig
+git submodule init
+git submodule update
+```
+
 #### Быстрый старт
 ```cpp
 #include <iostream>
