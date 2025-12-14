@@ -47,8 +47,8 @@ log_level: debug
 
 int main()
 {
-
-	Cfig config("config.ini");
+	// название файла, разделитель, и комментарий
+	Cfig config("config.ini", Cfig::EQUAL, Cfig::HASH);
 
 	int port = config.get("server", "port").toInt();
 	std::string host = config.get("server", "host");
