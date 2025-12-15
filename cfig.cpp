@@ -9,6 +9,14 @@ std::set<std::string> Cfig::sections() const
     return res;
 }
 
+std::set<std::string> Cfig::keys(const std::string& section) const
+{
+    std::set<std::string> res;
+    for (const auto& [key, item] : data.at(section))
+        res.insert(key);
+    return res;
+}
+
 Cfig::Cfig(const CommentStyle& style, const Delimiter& del)
 {
 	setDelimiter(del);

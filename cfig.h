@@ -160,6 +160,8 @@ public:
 
     std::set<std::string> sections() const;
 
+    std::set<std::string> keys(const std::string& section) const;
+
 };
 
 
