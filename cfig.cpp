@@ -1,6 +1,13 @@
 
 #include "cfig.h"
 
+std::set<std::string> Cfig::keys()
+{
+    std::set<std::string> res;
+    for (const auto& [key, item] : data)
+        res.insert(key);
+    return res;
+}
 
 Cfig::Cfig(const CommentStyle& style, const Delimiter& del)
 {

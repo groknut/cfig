@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include <unordered_map>
+#include <set>
 
 // // ERRORS
 class FileNotExistence {};
@@ -156,6 +157,9 @@ public:
 	T get(const std::string& key, const T& defaultValue) const;
 		
 	void load(const std::string& filename);	
+
+    std::set<std::string> keys();
+
 };
 
 
