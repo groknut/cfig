@@ -158,7 +158,7 @@ public:
 		
 	void load(const std::string& filename);	
 
-    std::set<std::string> keys();
+    std::set<std::string> sections();
 
 };
 

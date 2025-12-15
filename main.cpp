@@ -29,9 +29,8 @@ int main()
 	std::cout << "MyPair: " << mypair.first << std::endl;
 	std::cout << "MyPair: " << mypair.second << std::endl;
 	
-    for (auto& item : config.keys())
+    for (auto& item : config.sections())
         std::cout << item << " ";
-	
-	
+		
 	return 0;
 }
