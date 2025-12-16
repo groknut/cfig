@@ -112,7 +112,7 @@ class Cfig
 
 public:
 	enum CommentStyle {
-		HASH, SEMICOLON, DOUBLE_SLASH
+		HASH, SEMICOLON
 	};
 	enum Delimiter {
 		EQUAL, COLON

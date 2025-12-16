@@ -31,7 +31,7 @@ int main()
 	
     for (auto& item : config.sections())
         std::cout << item << " ";
-
+    std::cout << std::endl;
     for (auto& item : config.keys("server"))
         std::cout << item << " ";
 		
